@@ -1,13 +1,14 @@
-const int enableMotor1 = 6;
-const int enableMotor2 = 7;
+const int enableMotor1 = 2;
+const int enableMotor2 = 5;
 
-const int motor1Frwd = 2;
+const int motor1Frwd = 4;
 const int motor1Bkwd = 3;
-const int motor2Frwd = 4;
-const int motor2Bkwd = 5;
+const int motor2Frwd = 7;
+const int motor2Bkwd = 6;
 
 //Sensor variables
-const int ultrasonicPin = 20;
+const int usTrigPin = 8;
+const int usEchoPin = 9;
 long distance, duration;
 
 char thing = 'f';
@@ -20,6 +21,9 @@ void setup() {
   pinMode(motor1Bkwd, OUTPUT);
   pinMode(motor2Frwd, OUTPUT);
   pinMode(motor2Bkwd, OUTPUT);
+
+  pinMode(usTrigPin, OUTPUT);
+  pinMode(usEchoPin, INPUT);
 
   digitalWrite(enableMotor1, HIGH);
   digitalWrite(enableMotor2, HIGH);
@@ -42,38 +46,41 @@ void loop() {
       turn();
       break;
   }*/
-  distance = distanceUS();
-  if(distance < 10){
+ distance = distanceUS();
+ Serial.println(distance);
+  if(distance < 25){
     digitalWrite(motor1Frwd, LOW);
     digitalWrite(motor2Frwd, LOW);
-    
+    digitalWrite(enableMotor1, LOW);
+    digitalWrite(enableMotor2, LOW);
+  }else if(distance < 50) { 
+    digitalWrite(motor1Frwd, HIGH);
+    digitalWrite(motor2Frwd, HIGH);
+    delay(66);
+    digitalWrite(motor1Frwd, LOW);
+    digitalWrite(motor2Frwd, LOW);
+    delay(33);
   }else {
-  digitalWrite(motor1Frwd, HIGH);
-  digitalWrite(motor2Frwd, HIGH);
-  delay(100);
-  digitalWrite(motor1Frwd, LOW);
-  digitalWrite(motor2Frwd, LOW);
-  delay(10);
+    digitalWrite(motor1Frwd, HIGH);
+    digitalWrite(motor2Frwd, HIGH);
+    delay(100);
   }
 }
 
 //Read from ultrasonic and convert to cm
 int distanceUS(){
   //Short LOW pulse to get clean HIGH Pulse
-    pinMode(ultrasonicPin, OUTPUT);
-    digitalWrite(ultrasonicPin, LOW);
+    digitalWrite(usTrigPin, LOW);
     delay(2);
-    digitalWrite(ultrasonicPin, HIGH);
+    digitalWrite(usTrigPin, HIGH);
     delay(5);
-    digitalWrite(ultrasonicPin, LOW);
+    digitalWrite(usTrigPin, LOW);
 
-    pinMode(ultrasonicPin, INPUT);
-    duration = pulseIn(ultrasonicPin, HIGH);
+    duration = pulseIn(usEchoPin, HIGH);
 
-  //Used for testing for now
-    Serial.println("Ultrasonic duration: ");
-    Serial.println(duration);
-
+  //Random delay...not sure why
+    delay(250);
+    
   //Sound travels 29 milliseconds per centimeter. It travels forth and back, so divide by 2. 
     return duration / 29 / 2;
 }
