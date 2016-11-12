@@ -7,12 +7,12 @@ verb - fly or rise high in the air.
 
 This smart robot avoids obstacle and stop at the edge of the surface at will.
 
-## How it works
+## How it operates
 The ultrasonic sensor detects obstacles and the infrared sensor detects the edge of the surface.
 
 The robot moves forward and when it detects anything, it reverse a little bit and turn.
 
-The LED on the side indicates what the robot is thinking. If it is green, it means the parameter is clear and the robot is moving forward. If it is red, it means it detects something and reverse.
+The LED on the side indicates what the robot is thinking. If it is green, it means the parameter is clear and the robot is moving forward. If it is red, it means it detects something, reverse and continue its course.
 
 ## Developers
 1. Jimmy - Mechanical Designer
