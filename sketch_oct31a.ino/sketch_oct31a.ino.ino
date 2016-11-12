@@ -8,6 +8,10 @@ const int motor2Bkwd = 6;
 //Sensor variables
 const int usTrigPin = 8;
 const int usEchoPin = 9;
+
+//Led Pins
+const int ledRed = 12;
+const int ledGreen = 13;
 long distanceUS, duration;
 
 #define ifPin A0
@@ -27,6 +31,8 @@ void setup() {
   pinMode(usTrigPin, OUTPUT);
   pinMode(usEchoPin, INPUT);
   pinMode(ifPin, INPUT);
+  pinMode(ledRed, OUTPUT);
+  pinMode(ledGreen, OUTPUT);
   
   // initialize serial communication:
   Serial.begin(9600);
@@ -34,10 +40,12 @@ void setup() {
 
 void loop() {
  if(obstacle){ //Turn if obstacle found
+  digitalWrite(ledRed,LOW);
+  digitalWrite(ledGreen,HIGH);
   //Serial.println("Obstacle found. I will turn.");
-  delay(400);
+  //.delay(400);
   setMotors(1, 0, 0, 1);
-  delay(900);
+  delay(750);//900
   setMotors(0, 0, 0, 0);
   initialBoost = true;
   obstacle = false;
@@ -45,13 +53,14 @@ void loop() {
  if(initialBoost){
   //Serial.println("Initial boost: Activated");
   setMotors(1, 0, 1, 0);
-  delay(10 00);
+  delay(250);
   initialBoost = false; 
  }
  distanceUS = distancecalcUS();
  distanceIR = sharp.distance();
- //Serial.println(distanceUS);
- Serial.println(distanceIR);
+ Serial.println(distanceUS);
+ //Serial.println(distanceIR);
+ digitalWrite(ledGreen,HIGH);
   moveForward();
 }
 
@@ -85,13 +94,17 @@ void turn(){
   }
 */
 void moveForward(){
-  if(distanceUS < 10 || distanceIR> 60){
-    Serial.println("Move 10");
+  if(distanceUS < 10 || distanceIR> 50 || distanceIR < 25){
+    //Serial.println("Move 10");
+    digitalWrite(ledGreen,LOW);
+    digitalWrite(ledRed,HIGH);
     setMotors(0, 1, 0, 1);
-    delay(900);
+    delay(900);//900
     setMotors(0, 0, 0, 0);
     obstacle = true;
    }else if(distanceUS < 25){
+    digitalWrite(ledGreen,LOW);
+    digitalWrite(ledRed,HIGH);
     Serial.println("Move 25");
     setMotors(0, 1, 0, 1);
     delay(400);
@@ -100,18 +113,24 @@ void moveForward(){
   }else if(distanceUS < 50) { 
     Serial.println("Move 50");
     setMotors(1, 0, 1, 0);
-    delay(66);
+    delay(60);//66
     setMotors(0, 0, 0, 0);
-    delay(33);
+    delay(20);//33
+    //new
+    //setMotors(1,0,1,0);
     setMotors(0, 0, 1, 0);
     delay(10);
     setMotors(0, 0, 0, 0);
   }else{
     //Serial.println("Move Max");
     setMotors(1, 0, 1, 0);
-    delay(100);
+    delay(100);//100
+    //new
+    //setMotors(0,0,0,0);
+    //delay(20);
+    //setMotors(1,0,1,0);
     setMotors(0, 0, 1, 0);
-    delay(10);
+    delay(20);
     setMotors(1, 0, 1, 0);
   } 
 }
