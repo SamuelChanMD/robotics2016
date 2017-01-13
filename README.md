@@ -16,7 +16,7 @@ The LED on the side indicates what the robot is thinking. If it is green, it mea
 
 ## Developers
 1. Jimmy - Mechanical Designer
-2. Billy - Circuit Guy
+2. Yu - Circuit Guy
 3. Sam - Coder
 4. Raphael - Coder
 5. Zolton - Helper
